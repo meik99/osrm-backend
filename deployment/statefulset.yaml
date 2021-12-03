@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: backend
+  namespace: openroad
+spec:
+  selector:
+    matchLabels:
+      app: openroad
+      type: backend
+  serviceName: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: openroad
+        type: backend
+    spec:
+      containers:
+      - name: backend
+        image: meik99/openroad-backend:latest
+        command: ["osrm-routed"]
+        args:
+          - "--algorithm"
+          - "mld"
+          - "/maps/austria-latest.osrm"
+        ports:
+        - containerPort: 5000
+          name: web        
+
