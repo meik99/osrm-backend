@@ -31,7 +31,8 @@ RUN NPROC=${BUILD_CONCURRENCY:-$(grep -c ^processor /proc/cpuinfo 2>/dev/null ||
 # Multistage build to reduce image size - https://docs.docker.com/engine/userguide/eng-image/multistage-build/#use-multi-stage-builds
 # Only the content below ends up in the image, this helps remove /src from the image (which is large)
 FROM debian:bullseye-slim as runstage
-RUN mkdir -p /src  && mkdir -p /opt
+RUN mkdir -p /src  && mkdir -p /opt && mkdir -p /maps
+COPY ./maps/. /maps
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libboost-program-options1.74.0 libboost-regex1.74.0 \
         libboost-date-time1.74.0 libboost-chrono1.74.0 libboost-filesystem1.74.0 \

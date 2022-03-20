@@ -112,3 +112,5 @@ lib/binding
 
 # maps
 maps/
+
+maps/*
