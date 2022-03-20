@@ -19,7 +19,6 @@ jobs:
           cd build
           cmake ..
           cmake --build .
-          cmake --build . --target install
       - name: Archive binary
         uses: actions/upload-artifact@v3
         with:
