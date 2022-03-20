@@ -1,0 +1,46 @@
+name: build-and-package-maps
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-osrm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build osrm-backend
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          cmake --build .
+          cmake --build . --target install
+      - name: Archive binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: osrm-binaries
+          path: |
+            build/osrm-*
+      - name: Build maps
+        run: |
+          mkdir -p build/maps
+          cd build/maps
+          
+          wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
+          wget http://download.geofabrik.de/europe/italy-latest.osm.pbf
+                    
+          apt install osmium-tool
+          osmium merge austria-latest.osm.pbf italy-latest.osm.pbf -o austria-italy-latest.osm.pbf
+          
+          osrm-extract -p ../../profiles/car.lua austria-italy-latest.osm.pbf
+          
+          osrm-partition austria-italy-latest.osrm
+          osrm-customize austria-italy-latest.osrm
+      - name: Archive map
+        uses: actions/upload-artifact@v3
+        with:
+          name: austria-italy-latest
+          path: |
+            build/maps/austria-italy-latest.osrm
