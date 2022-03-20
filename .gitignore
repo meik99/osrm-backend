@@ -109,3 +109,6 @@ debug.lua
 
 # node-osrm artifacts
 lib/binding
+
+# maps
+maps/
