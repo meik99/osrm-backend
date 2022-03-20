@@ -36,10 +36,10 @@ jobs:
           sudo apt install osmium-tool
           osmium merge austria-latest.osm.pbf italy-latest.osm.pbf -o austria-italy-latest.osm.pbf
           
-          osrm-extract -p ../../profiles/car.lua austria-italy-latest.osm.pbf
+          ../osrm-extract -p ../../profiles/car.lua austria-italy-latest.osm.pbf
           
-          osrm-partition austria-italy-latest.osrm
-          osrm-customize austria-italy-latest.osrm
+          ../osrm-partition austria-italy-latest.osrm
+          ../osrm-customize austria-italy-latest.osrm
       - name: Archive map
         uses: actions/upload-artifact@v3
         with:
